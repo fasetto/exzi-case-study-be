@@ -31,6 +31,14 @@ router.get("/", async (req, res) => {
 
   const userId = req.query?.userId;
 
+  const isValid = ObjectId.isValid(userId);
+
+  if (!isValid) {
+    return res.status(400).json({
+      message: "Invalid userId",
+    });
+  }
+
   if (!userId) {
     return res.status(400).json({
       message: "userId is required",
@@ -50,7 +58,9 @@ router.get("/:walletId", async (req, res) => {
   const isValid = ObjectId.isValid(walletId);
 
   if (!isValid) {
-    return res.sendStatus(400);
+    return res.status(400).json({
+      message: "Invalid walletId",
+    });
   }
 
   const wallet = await walletService.getWalletById(walletId);

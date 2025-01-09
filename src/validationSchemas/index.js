@@ -1,11 +1,16 @@
+import { ObjectId } from "mongodb";
 import { z } from "zod";
 
+export const ObjectIdSchema = z.string().refine(ObjectId.isValid, {
+  message: "Invalid Id",
+});
+
 export const SseSchema = z.object({
-  userId: z.string(),
+  userId: ObjectIdSchema,
 });
 
 export const WalletSchema = z.object({
-  userId: z.string(),
+  userId: ObjectIdSchema,
   currency: z.enum(["btc"]),
 });
 
@@ -15,7 +20,7 @@ export const UserSchema = z.object({
 });
 
 export const TransactionSchema = z.object({
-  senderWalletId: z.string(),
-  recipientWalletId: z.string(),
+  senderWalletId: ObjectIdSchema,
+  recipientWalletId: ObjectIdSchema,
   amount: z.number().gt(0),
 });

@@ -26,6 +26,10 @@ router.post("/", async (req, res) => {
       recipientWalletId
     );
 
+    if (!senderWallet || !recipientWallet) {
+      return res.status(404).json({ error: "Wallet not found" });
+    }
+
     const transactionService = new TransactionService();
 
     try {
