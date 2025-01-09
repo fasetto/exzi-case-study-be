@@ -7,6 +7,7 @@ import {
 import TransactionService from "../services/transactionService.js";
 import WalletService from "../services/walletService.js";
 import sseChannel from "../sseChannel.js";
+import transactionObserver from "../lib/transactionObserver.js";
 
 const router = express.Router();
 
@@ -76,6 +77,8 @@ router.post("/", async (req, res) => {
         recipientWallet,
         amount,
       });
+
+      transactionObserver.emit("transaction", transaction);
 
       sseChannel.broadcast(
         {
