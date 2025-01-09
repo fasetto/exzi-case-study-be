@@ -1,0 +1,26 @@
+{
+  "name": "exzi-case-study-be",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "nodemon --env-file=.env -w src/ --ignore tests/"
+  },
+  "dependencies": {
+    "better-sse": "^0.14.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.12.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/node": "^22.10.5",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.9"
+  }
+}
