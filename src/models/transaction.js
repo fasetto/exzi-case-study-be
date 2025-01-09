@@ -1,4 +1,4 @@
-export default class Transfer {
+export default class Transaction {
   constructor({ _id, txId, from, to, amount, timestamp }) {
     this._id = _id;
     this.txId = txId;

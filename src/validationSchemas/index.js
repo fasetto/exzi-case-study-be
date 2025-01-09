@@ -14,7 +14,7 @@ export const UserSchema = z.object({
   email: z.string().email(),
 });
 
-export const TransferSchema = z.object({
+export const TransactionSchema = z.object({
   senderWalletId: z.string(),
   recipientWalletId: z.string(),
   amount: z.number().gt(0),

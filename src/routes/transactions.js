@@ -1,12 +1,12 @@
 import express from "express";
-import { TransferSchema } from "../validationSchemas/index.js";
-import TransferService from "../services/transferService.js";
+import { TransactionSchema } from "../validationSchemas/index.js";
+import TransactionService from "../services/transactionService.js";
 import WalletService from "../services/walletService.js";
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const validationResult = await TransferSchema.safeParseAsync(req.body);
+  const validationResult = await TransactionSchema.safeParseAsync(req.body);
 
   if (!validationResult.success) {
     const { fieldErrors } = validationResult.error.flatten();
@@ -24,10 +24,10 @@ router.post("/", async (req, res) => {
       recipientWalletId
     );
 
-    const transferService = new TransferService();
+    const transactionService = new TransactionService();
 
     try {
-      const txId = await transferService.createTransaction({
+      const txId = await transactionService.create({
         senderWallet,
         recipientWallet,
         amount,

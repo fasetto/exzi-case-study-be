@@ -1,5 +1,5 @@
 import database from "./Database.js";
-import Transfer from "../models/transfer.js";
+import Transaction from "../models/transaction.js";
 import BlockChain from "../lib/blockchain.js";
 import WalletService from "./walletService.js";
 
@@ -8,7 +8,7 @@ import WalletService from "./walletService.js";
  * @typedef {import("mongodb").Collection} Collection
  */
 
-export default class TransferService {
+export default class TransactionService {
   /** @type {Collection} */
   #collection;
 
@@ -19,7 +19,7 @@ export default class TransferService {
   #walletService;
 
   constructor() {
-    this.#collection = database.getCollection("transfers");
+    this.#collection = database.getCollection("transactions");
     this.#blockchain = new BlockChain();
     this.#walletService = new WalletService();
   }
@@ -30,7 +30,7 @@ export default class TransferService {
    * @param {Wallet} params.recipientWallet
    * @param {Number} params.amount
    */
-  async createTransaction({ senderWallet, recipientWallet, amount }) {
+  async create({ senderWallet, recipientWallet, amount }) {
     const txId = this.#blockchain.transferFunds({
       senderWallet,
       recipientWallet,
@@ -42,7 +42,7 @@ export default class TransferService {
     try {
       session.startTransaction();
 
-      const transfer = new Transfer({
+      const transaction = new Transaction({
         txId,
         from: senderWallet.address,
         to: recipientWallet.address,
@@ -52,7 +52,7 @@ export default class TransferService {
 
       await this.#collection.insertOne(
         {
-          ...transfer,
+          ...transaction,
         },
         {
           session,
@@ -70,8 +70,6 @@ export default class TransferService {
         amount,
         session,
       });
-
-      // TODO: Logging and Alerts if (funds > $1000)
 
       await session.commitTransaction();
 
