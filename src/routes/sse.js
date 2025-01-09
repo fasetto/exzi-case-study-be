@@ -7,7 +7,7 @@ import { SseSchema } from "../validationSchemas/index.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const result = await SseSchema.safeParseAsync(req.body);
+  const result = await SseSchema.safeParseAsync(req.query);
 
   if (!result.success) {
     const { fieldErrors } = result.error.flatten();
