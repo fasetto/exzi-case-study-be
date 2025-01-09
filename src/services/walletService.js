@@ -94,6 +94,9 @@ export default class WalletService {
           $push: {
             walletIds: walletId,
           },
+        },
+        {
+          session,
         }
       );
 
