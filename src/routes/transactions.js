@@ -1,11 +1,49 @@
 import express from "express";
 
-import { TransactionSchema } from "../validationSchemas/index.js";
+import {
+  PaginationSchema,
+  TransactionSchema,
+} from "../validationSchemas/index.js";
 import TransactionService from "../services/transactionService.js";
 import WalletService from "../services/walletService.js";
 import sseChannel from "../sseChannel.js";
 
 const router = express.Router();
+
+router.get("/", async (req, res) => {
+  const validationResult = await PaginationSchema.safeParseAsync(req.query);
+
+  if (!validationResult.success) {
+    const { fieldErrors } = validationResult.error.flatten();
+
+    return res.status(400).json({ errors: fieldErrors });
+  }
+
+  const { page, limit } = validationResult.data;
+
+  const transactionService = new TransactionService();
+
+  const result = await transactionService.getAll({
+    page,
+    limit,
+  });
+
+  return res.json(result);
+});
+
+router.get("/:txId", async (req, res) => {
+  const { txId } = req.params;
+
+  const transactionService = new TransactionService();
+
+  const transaction = await transactionService.getById(txId);
+
+  if (!transaction) {
+    return res.sendStatus(404);
+  }
+
+  return res.json(transaction);
+});
 
 router.post("/", async (req, res) => {
   const validationResult = await TransactionSchema.safeParseAsync(req.body);

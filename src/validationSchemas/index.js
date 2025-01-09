@@ -24,3 +24,8 @@ export const TransactionSchema = z.object({
   recipientWalletId: ObjectIdSchema,
   amount: z.number().gt(0),
 });
+
+export const PaginationSchema = z.object({
+  page: z.coerce.number().positive(),
+  limit: z.coerce.number().positive().max(50),
+});

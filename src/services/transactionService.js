@@ -83,4 +83,17 @@ export default class TransactionService {
       await session.endSession();
     }
   }
+
+  getAll({ page = 1, limit = 50 }) {
+    return this.#collection
+      .find()
+      .sort({ timestamp: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .toArray();
+  }
+
+  getById(txId) {
+    return this.#collection.findOne({ txId });
+  }
 }
