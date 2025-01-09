@@ -1,7 +1,9 @@
 import express from "express";
+
 import { TransactionSchema } from "../validationSchemas/index.js";
 import TransactionService from "../services/transactionService.js";
 import WalletService from "../services/walletService.js";
+import sseChannel from "../sseChannel.js";
 
 const router = express.Router();
 
@@ -27,13 +29,20 @@ router.post("/", async (req, res) => {
     const transactionService = new TransactionService();
 
     try {
-      const txId = await transactionService.create({
+      const transaction = await transactionService.create({
         senderWallet,
         recipientWallet,
         amount,
       });
 
-      return res.json({ txId });
+      sseChannel.broadcast(
+        {
+          ...transaction,
+        },
+        "new-transaction"
+      );
+
+      return res.json({ txId: transaction.txId });
     } catch (error) {
       return res.status(400).json({ error: error.message });
     }

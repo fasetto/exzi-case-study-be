@@ -73,7 +73,7 @@ export default class TransactionService {
 
       await session.commitTransaction();
 
-      return txId;
+      return transaction;
     } catch (error) {
       await session.abortTransaction();
       console.error(error);
