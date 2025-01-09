@@ -31,16 +31,16 @@ export default class TransferService {
    * @param {Number} params.amount
    */
   async createTransaction({ senderWallet, recipientWallet, amount }) {
+    const txId = this.#blockchain.transferFunds({
+      senderWallet,
+      recipientWallet,
+      amount,
+    });
+
     const session = database.client.startSession();
 
     try {
       session.startTransaction();
-
-      const txId = this.#blockchain.transferFunds({
-        senderWallet,
-        recipientWallet,
-        amount,
-      });
 
       const transfer = new Transfer({
         txId,

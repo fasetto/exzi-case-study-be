@@ -26,13 +26,17 @@ router.post("/", async (req, res) => {
 
     const transferService = new TransferService();
 
-    const txId = await transferService.createTransaction({
-      senderWallet,
-      recipientWallet,
-      amount,
-    });
+    try {
+      const txId = await transferService.createTransaction({
+        senderWallet,
+        recipientWallet,
+        amount,
+      });
 
-    return res.json({ txId });
+      return res.json({ txId });
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
   } catch {
     return res.sendStatus(500);
   }
