@@ -1,6 +1,5 @@
 # project folders
-/redis_data
-/mongodb_data
+/data
 
 # compiled output
 /dist
