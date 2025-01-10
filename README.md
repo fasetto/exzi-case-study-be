@@ -28,6 +28,12 @@ cp .env.example .env
 docker compose up -d
 ```
 
+Also npm scripts can be used:
+
+- npm run dev
+- npm run test
+- npm run start
+
 ![image](https://github.com/user-attachments/assets/8aadd3a2-67ff-482b-b957-d3149540a17b)
 
 ## Api Endpoints
