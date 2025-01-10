@@ -1,4 +1,4 @@
-import database from "./Database.js";
+import database from "./database.js";
 import Transaction from "../models/transaction.js";
 import BlockChain from "../lib/blockchain.js";
 import WalletService from "./walletService.js";

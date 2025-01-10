@@ -1,4 +1,4 @@
-import database from "./Database.js";
+import database from "./database.js";
 
 export default class LogService {
   /** @type {import("mongodb").Collection} */

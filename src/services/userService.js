@@ -1,4 +1,4 @@
-import database from "./Database.js";
+import database from "./database.js";
 
 /**
  * @typedef {import("../models/user.js").default} User

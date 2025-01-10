@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import Wallet from "../models/wallet.js";
-import database from "./Database.js";
+import database from "./database.js";
 import BlockChain from "../lib/blockchain.js";
 import redisClient from "./redis.js";
 
