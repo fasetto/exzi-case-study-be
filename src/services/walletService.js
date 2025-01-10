@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import Wallet from "../models/wallet.js";
 import database from "./Database.js";
 import BlockChain from "../lib/blockchain.js";
+import redisClient from "./redis.js";
 
 export default class WalletService {
   /** @type {import("mongodb").Collection} */
@@ -135,7 +136,23 @@ export default class WalletService {
 
   /** @returns {Promise<Wallet | null>} */
   async getWalletById(walletId) {
-    const result = await this.#collection.findOne(
+    let wallet = null;
+    const cacheKey = `wallet:${walletId}`;
+
+    wallet = await redisClient.hGetAll(cacheKey);
+
+    const cacheHit = Object.keys(wallet).length > 0;
+
+    if (cacheHit) {
+      console.log(`Cache hit: wallet:${walletId}`);
+
+      return new Wallet({
+        ...wallet,
+      });
+    }
+
+    wallet = null;
+    wallet = await this.#collection.findOne(
       {
         _id: ObjectId.createFromHexString(walletId),
       },
@@ -146,12 +163,18 @@ export default class WalletService {
       }
     );
 
-    if (!result) {
+    if (!wallet) {
       return null;
     }
 
+    await redisClient.hSet(cacheKey, {
+      ...wallet,
+      _id: wallet._id.toString(),
+      userId: wallet.userId.toString(),
+    });
+
     return new Wallet({
-      ...result,
+      ...wallet,
     });
   }
 }
