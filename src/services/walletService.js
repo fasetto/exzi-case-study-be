@@ -86,7 +86,7 @@ export default class WalletService {
         }
       );
 
-      await database.getCollection("users").updateOne(
+      const { matchedCount } = await database.getCollection("users").updateOne(
         {
           _id: wallet.userId,
         },
@@ -100,9 +100,17 @@ export default class WalletService {
         }
       );
 
+      if (matchedCount === 0) {
+        throw new Error("User does not exists");
+      }
+
       await session.commitTransaction();
-    } catch {
+    } catch (error) {
+      console.error(error);
+
       await session.abortTransaction();
+
+      throw error;
     } finally {
       await session.endSession();
     }

@@ -21,7 +21,13 @@ router.post("/", async (req, res) => {
 
   const walletService = new WalletService();
 
-  await walletService.createNew(userId);
+  try {
+    await walletService.createNew(userId);
+  } catch (error) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
 
   return res.sendStatus(201);
 });
